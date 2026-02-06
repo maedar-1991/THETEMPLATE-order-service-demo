@@ -7,118 +7,126 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container" id="main-content">
-        <h1>商品紹介動画 制作フォーム</h1>
+    <div id="main-content" class="container">
+        <h1>商品紹介動画 制作オーダー</h1>
         <p class="description">素材（画像・動画）とテキストをアップロードしてください。</p>
-        
+
         <form id="upload-form">
-            <section class="scene">
+            <div class="scene">
+                <h2>基本情報</h2>
+                <div class="input-group">
+                    <label for="company_name">企業名</label>
+                    <input type="text" id="company_name" name="company_name" placeholder="株式会社サンプル" required>
+                </div>
+            </div>
+
+            <div class="scene">
                 <h2>Scene 01</h2>
                 <div class="input-group">
                     <label>写真 (1枚)</label>
-                    <label class="custom-file-upload">
-                        <input type="file" accept=".jpg,.png,.gif" data-scene="1" class="file-input">
-                        メディアを選択
-                    </label>
-                    <div class="preview" id="preview-1"></div>
+                    <label for="file-1" class="custom-file-upload">メディアを選択</label>
+                    <input type="file" id="file-1" class="file-input" data-scene="1" name="scene1_file" accept=".mov,.mp4,.jpg,.png,.gif" required>
+                    <div id="preview-1" class="preview"></div>
                 </div>
                 <div class="input-group">
                     <label>テキスト (20文字以内)</label>
-                    <input type="text" maxlength="20" placeholder="例：最新モデル登場">
+                    <input type="text" name="scene1_text" maxlength="20" placeholder="20文字以内で入力">
                 </div>
-            </section>
+            </div>
 
-            <section class="scene">
+            <div class="scene">
                 <h2>Scene 02</h2>
                 <div class="input-group">
                     <label>写真 (1枚)</label>
-                    <label class="custom-file-upload">
-                        <input type="file" accept=".jpg,.png,.gif" data-scene="2" class="file-input">
-                        メディアを選択
-                    </label>
-                    <div class="preview" id="preview-2"></div>
+                    <label for="file-2" class="custom-file-upload">メディアを選択</label>
+                    <input type="file" id="file-2" class="file-input" data-scene="2" name="scene2_file" accept=".mov,.mp4,.jpg,.png,.gif" required>
+                    <div id="preview-2" class="preview"></div>
                 </div>
                 <div class="input-group">
                     <label>テキスト01 (16文字以内)</label>
-                    <input type="text" maxlength="16">
+                    <input type="text" name="scene2_text1" maxlength="16">
                     <label>テキスト02-01 (20文字以内)</label>
-                    <input type="text" maxlength="20">
+                    <input type="text" name="scene2_text2_1" maxlength="20">
                     <label>テキスト02-02 (20文字以内)</label>
-                    <input type="text" maxlength="20">
+                    <input type="text" name="scene2_text2_2" maxlength="20">
                 </div>
-            </section>
+            </div>
 
-            <section class="scene">
+            <div class="scene">
                 <h2>Scene 03</h2>
                 <div class="input-group">
                     <label>写真 or 動画 (1枚)</label>
-                    <label class="custom-file-upload">
-                        <input type="file" accept=".jpg,.png,.gif,.mov,.mp4" data-scene="3" class="file-input">
-                        メディアを選択
-                    </label>
-                    <div class="preview" id="preview-3"></div>
+                    <label for="file-3" class="custom-file-upload">メディアを選択</label>
+                    <input type="file" id="file-3" class="file-input" data-scene="3" name="scene3_file" accept=".mov,.mp4,.jpg,.png,.gif" required>
+                    <div id="preview-3" class="preview"></div>
                 </div>
                 <div class="input-group">
                     <label>テキスト01 (10文字以内)</label>
-                    <input type="text" maxlength="10">
+                    <input type="text" name="scene3_text1" maxlength="10">
                     <label>テキスト02 (20文字以内)</label>
-                    <input type="text" maxlength="20">
+                    <input type="text" name="scene3_text2" maxlength="20">
                 </div>
-            </section>
+            </div>
 
-            <section class="scene">
+            <div class="scene">
                 <h2>Scene 04</h2>
                 <p class="instruction">写真は2枚必要です。それぞれ選んでください。</p>
                 <div class="input-row">
                     <div class="input-group-half">
                         <label>1枚目</label>
-                        <label class="custom-file-upload highlight">
-                            <input type="file" accept=".jpg,.png,.gif,.mov,.mp4" data-scene="4" data-slot="1" class="file-input">
-                            選択
-                        </label>
-                        <div class="preview" id="preview-4-1"></div>
+                        <label for="file-4-1" class="custom-file-upload">選択</label>
+                        <input type="file" id="file-4-1" class="file-input" data-scene="4" data-slot="1" name="scene4_file1" accept=".mov,.mp4,.jpg,.png,.gif" required>
+                        <div id="preview-4-1" class="preview"></div>
                     </div>
                     <div class="input-group-half">
                         <label>2枚目</label>
-                        <label class="custom-file-upload highlight">
-                            <input type="file" accept=".jpg,.png,.gif,.mov,.mp4" data-scene="4" data-slot="2" class="file-input">
-                            選択
-                        </label>
-                        <div class="preview" id="preview-4-2"></div>
+                        <label for="file-4-2" class="custom-file-upload">選択</label>
+                        <input type="file" id="file-4-2" class="file-input" data-scene="4" data-slot="2" name="scene4_file2" accept=".mov,.mp4,.jpg,.png,.gif" required>
+                        <div id="preview-4-2" class="preview"></div>
                     </div>
                 </div>
-                <div class="input-group" style="margin-top:20px;">
+                <div class="input-group">
                     <label>テキスト01 (9文字以内)</label>
-                    <input type="text" maxlength="9">
+                    <input type="text" name="scene4_text1" maxlength="9">
                     <label>テキスト02 (20文字以内)</label>
-                    <input type="text" maxlength="20">
+                    <input type="text" name="scene4_text2" maxlength="20">
                 </div>
-            </section>
+            </div>
 
-            <section class="scene">
+            <div class="scene">
                 <h2>Scene 05</h2>
                 <div class="input-group">
                     <label>写真 or 動画 (1枚)</label>
-                    <label class="custom-file-upload">
-                        <input type="file" accept=".jpg,.png,.gif,.mov,.mp4" data-scene="5" class="file-input">
-                        メディアを選択
-                    </label>
-                    <div class="preview" id="preview-5"></div>
+                    <label for="file-5" class="custom-file-upload">メディアを選択</label>
+                    <input type="file" id="file-5" class="file-input" data-scene="5" name="scene5_file" accept=".mov,.mp4,.jpg,.png,.gif" required>
+                    <div id="preview-5" class="preview"></div>
                 </div>
                 <div class="input-group">
                     <label>テキスト (30文字以内)</label>
-                    <textarea maxlength="30" rows="3"></textarea>
+                    <input type="text" name="scene5_text" maxlength="30">
                 </div>
-            </section>
+            </div>
+
+            <div class="scene">
+                <h2>ロゴ</h2>
+                <div class="input-group">
+                    <label>ロゴデータ（pngの場合1000px×1000px以上推奨）</label>
+                    <p class="hint">※画像ファイル、.ai、.psdのみ選択可能</p>
+                    <label for="file-logo" class="custom-file-upload highlight">メディアを選択</label>
+                    <input type="file" id="file-logo" class="file-input" data-scene="logo" name="logo_file" accept=".png,.jpg,.jpeg,.ai,.psd" required>
+                    <div id="preview-logo" class="preview"></div>
+                </div>
+            </div>
 
             <button type="submit" id="submit-btn">データを送信</button>
         </form>
     </div>
 
-    <div id="success-message" style="display: none;" class="container">
-        <div class="success-content">
-            <h2 style="border:none; color:#27ae60;">送信完了</h2>
-            <p>画像とテキストがアップロードされました。<br>映像は後日お送りいたしますので少々お待ちくださいませ。</p>
+    <div id="success-message" style="display:none;">
+        <div class="container success-content">
+            <h1 style="color: #27ae60;">送信完了</h1>
+            <p>画像とテキストがアップロードされました。</p>
+            <p>映像は後日お送りいたしますので少々お待ちくださいませ。</p>
         </div>
     </div>
 
