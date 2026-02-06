@@ -7,15 +7,21 @@ document.addEventListener('DOMContentLoaded', () => {
         input.addEventListener('change', function() {
             const sceneId = this.getAttribute('data-scene');
             const slotId = this.getAttribute('data-slot');
-            
-            // スロットがある場合は個別ID（Scene 4用）、ない場合は標準ID
             const targetId = slotId ? `preview-${sceneId}-${slotId}` : `preview-${sceneId}`;
             const previewContainer = document.getElementById(targetId);
             
-            previewContainer.innerHTML = ''; 
-
+            previewContainer.innerHTML = '';
             const file = this.files[0];
+
             if (file) {
+                // .ai や .psd はブラウザでプレビューできないため代替表示
+                if (file.name.endsWith('.ai') || file.name.endsWith('.psd')) {
+                    const icon = document.createElement('div');
+                    icon.innerHTML = `<p style="color:white; padding:20px;">${file.name}<br>(プレビュー非対応形式)</p>`;
+                    previewContainer.appendChild(icon);
+                    return;
+                }
+
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     let media;
@@ -35,85 +41,55 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- 2. バリデーションとサーバーへの送信処理 ---
+    // --- 2. リアルタイム文字数チェック ---
+    const textInputs = document.querySelectorAll('input[type="text"], textarea');
+    textInputs.forEach(input => {
+        const errorMsg = document.createElement('p');
+        errorMsg.className = 'char-error';
+        errorMsg.style.color = 'red';
+        errorMsg.style.fontSize = '0.8rem';
+        errorMsg.style.marginTop = '5px';
+        errorMsg.style.display = 'none';
+        errorMsg.innerText = '文字数が制限を超えています';
+        input.parentNode.appendChild(errorMsg);
+
+        input.addEventListener('input', function() {
+            const maxLength = this.getAttribute('maxlength');
+            if (maxLength && this.value.length >= maxLength) {
+                // 最大文字数に達した（あるいは超えた）場合に表示
+                errorMsg.style.display = 'block';
+                this.style.borderColor = 'red';
+            } else {
+                errorMsg.style.display = 'none';
+                this.style.borderColor = '#ddd';
+            }
+        });
+    });
+
+    // --- 3. サーバーへの送信処理 ---
     uploadForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-
-        // 【入力チェック】
-        let errors = [];
-        const scenes = document.querySelectorAll('.scene');
-        
-        scenes.forEach((scene, index) => {
-            const sNum = index + 1;
-            const fInputs = scene.querySelectorAll('input[type="file"]');
-            const tInputs = scene.querySelectorAll('input[type="text"], textarea');
-
-            fInputs.forEach((fi, fIdx) => {
-                if (fi.files.length === 0) {
-                    const label = fInputs.length > 1 ? `の${fIdx + 1}枚目` : "";
-                    errors.push(`Scene 0${sNum}${label}のメディアが未選択です。`);
-                }
-            });
-
-            tInputs.forEach((ti, tIdx) => {
-                if (!ti.value.trim()) {
-                    const label = tInputs.length > 1 ? `のテキスト${tIdx + 1}` : "のテキスト";
-                    errors.push(`Scene 0${sNum}${label}を入力してください。`);
-                }
-            });
-        });
-
-        // エラーがあれば表示して中断
-        if (errors.length > 0) {
-            alert("入力不備があります：\n\n" + errors.join("\n"));
-            return;
-        }
-
-        // --- 3. バックエンド（Render）への実送信処理 ---
         const btn = document.getElementById('submit-btn');
         btn.disabled = true;
         btn.innerText = "データをBoxへ送信中...";
 
-        const formData = new FormData();
-
-        // シーンごとのデータを収集してFormDataに追加
-        scenes.forEach((scene, index) => {
-            const sKey = `Scene${index + 1}`;
-            
-            // テキストデータの取得
-            const tInputs = scene.querySelectorAll('input[type="text"], textarea');
-            tInputs.forEach((ti, tIdx) => {
-                formData.append(`${sKey}_Text_${tIdx + 1}`, ti.value);
-            });
-
-            // ファイルデータの取得
-            const fInputs = scene.querySelectorAll('input[type="file"]');
-            fInputs.forEach((fi, fIdx) => {
-                if (fi.files[0]) {
-                    // Box側で判別しやすいように名前を付けて送信
-                    formData.append('files', fi.files[0], `${sKey}_Media_${fIdx + 1}_${fi.files[0].name}`);
-                }
-            });
-        });
+        const formData = new FormData(uploadForm);
 
         try {
-            // RenderのサーバーへPOSTリクエスト
             const response = await fetch('/upload', {
                 method: 'POST',
                 body: formData
             });
 
             if (response.ok) {
-                // 成功：完了画面へ切り替え
                 document.getElementById('main-content').style.display = 'none';
                 document.getElementById('success-message').style.display = 'block';
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
                 throw new Error("アップロードに失敗しました。");
             }
-
         } catch (error) {
-            alert("エラーが発生しました。インターネット接続やBoxの期限を確認してください。");
+            alert("エラーが発生しました。接続を確認してください。");
             btn.disabled = false;
             btn.innerText = "データを送信";
         }
