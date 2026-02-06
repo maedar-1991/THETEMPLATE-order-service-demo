@@ -105,4 +105,20 @@ input[type="file"] { display: none; }
 }
 #submit-btn:disabled { background: #95a5a6; cursor: not-allowed; }
 
+
 .success-content { text-align: center; padding: 50px 0; }
+
+.char-error {
+    font-weight: bold;
+    animation: shake 0.2s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.highlight {
+    background-color: #e67e22 !important;
+}
